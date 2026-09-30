@@ -1,0 +1,16 @@
+{
+  "name": "v12-engine-viewer",
+  "version": "1.0.0",
+  "description": "Interactive 3D V12 engine (Three.js / WebGL)",
+  "private": true,
+  "scripts": {
+    "build": "esbuild js/main.js --bundle --minify --format=iife --outfile=dist/app.js",
+    "watch": "esbuild js/main.js --bundle --format=iife --outfile=dist/app.js --watch"
+  },
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}
