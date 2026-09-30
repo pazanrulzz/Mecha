@@ -26,6 +26,13 @@
       </svg>
     </button>
 
+    <!-- Hover label: a line from the part to a small popover with its name -->
+    <svg id="tipsvg" aria-hidden="true">
+      <polyline id="tipline" points="" />
+      <circle id="tipdot" r="4" cx="-10" cy="-10" />
+    </svg>
+    <button id="tipbox" type="button" hidden></button>
+
     <!-- Exploded view slider (bottom of the screen) -->
     <div id="exbar">
       <div id="exbox">
@@ -83,11 +90,6 @@
       </section>
       <!-- Info card of the selected part (filled by js/ui/panel.js) -->
       <section id="info"></section>
-      <!-- List of parts to click on (filled by js/ui/panel.js) -->
-      <section>
-        <div class="lab">Components</div>
-        <div id="plist"></div>
-      </section>
     </aside>
 
     <!-- 1) engine mesh data (defines window.ENGINE_DATA) -->

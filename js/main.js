@@ -11,6 +11,7 @@ import { updateParticles, heatLights, pointMat } from './effects/particles.js';
 import { renderPost, resizePost } from './effects/postprocessing.js';
 import { initPanel, setRev, setExplodeUI, togglePanel, panelWidth, updateReadouts } from './ui/panel.js';
 import { initInteraction, select, flyTo, hiMat } from './ui/interaction.js';
+import { updateTip } from './ui/tooltip.js';
 
 // ---- window size ----
 function resize() {
@@ -89,6 +90,7 @@ function frame() {
   }
 
   controls.update();
+  updateTip();   // keep the hover label on its part
   renderPost();
   requestAnimationFrame(frame);
 }

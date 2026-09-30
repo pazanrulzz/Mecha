@@ -59,13 +59,6 @@ button{font:inherit;color:inherit}
 .row b.live{color:#ffb98a}
 .actions{display:flex;gap:8px;margin-top:14px}
 .note{margin-top:12px;font-size:10.5px;color:#666870;line-height:1.5}
-/* parts list chips */
-.gt{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:14px 0 7px}
-.gt:first-child{margin-top:0}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{padding:5px 10px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:11.5px;cursor:pointer;transition:all .15s}
-.chip:hover{background:rgba(255,255,255,.12)}
-.chip.on{background:var(--red);border-color:var(--red);color:#fff}
 /* exploded view slider at the bottom */
 #exbar{position:fixed;left:0;right:min(var(--w),88vw);bottom:22px;display:flex;justify-content:center;pointer-events:none;z-index:4;transition:right .35s cubic-bezier(.3,.7,.2,1)}
 body.pc #exbar{right:0}
@@ -73,3 +66,13 @@ body.pc #exbar{right:0}
 #exbox label{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);white-space:nowrap}
 #exbox input[type=range]{margin:0;flex:1}
 #expv{font-size:12px;font-variant-numeric:tabular-nums;color:var(--txt);min-width:38px;text-align:right}
+
+/* hover label: line + popover */
+#tipsvg{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:3;overflow:visible}
+#tipline{fill:none;stroke:rgba(255,255,255,.9);stroke-width:1.5}
+#tipdot{fill:#fff;stroke:rgba(47,140,255,.9);stroke-width:2}
+#tipbox{position:fixed;left:0;top:0;z-index:4;padding:7px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.22);background:rgba(14,14,17,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--txt);font-size:12.5px;font-weight:600;letter-spacing:.01em;white-space:nowrap;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.5);transition:background .15s,border-color .15s}
+#tipbox:hover{background:var(--red);border-color:var(--red);color:#fff}
+#tipbox small{display:block;margin-top:1px;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+#tipbox:hover small{color:rgba(255,255,255,.8)}
+#tipbox[hidden]{display:none}

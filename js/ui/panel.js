@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { controls } from '../scene.js';
 import { IDLE, MAXR, S, state, fmt, gasTemp } from '../config.js';
 import { setExplode } from '../model/explode.js';
-import { INFO, GROUPS } from './info.js';
+import { INFO } from './info.js';
 
 const $ = id => document.getElementById(id);   // short way to find an element
 const panel = $('panel'), tog = $('tog'), rev = $('rev'), exp = $('exp');
@@ -43,40 +43,13 @@ export function setExplodeUI(v) {
   $('expv').textContent = Math.round(v * 100) + '%';
 }
 
-// ---- parts list: one chip per part, grouped ----
-function buildPartsList() {
-  const listEl = $('plist');
-  GROUPS.forEach(([title, keys]) => {
-    const h = document.createElement('div');
-    h.className = 'gt';
-    h.textContent = title;
-    listEl.appendChild(h);
-    const wrap = document.createElement('div');
-    wrap.className = 'chips';
-    keys.forEach(k => {
-      const b = document.createElement('button');
-      b.className = 'chip';
-      b.dataset.k = k;
-      b.textContent = INFO[k].name.replace(/ · .*/, '').replace(/ &.*/, '');   // short name
-      b.addEventListener('click', () => onSelect(k, true));
-      wrap.appendChild(b);
-    });
-    listEl.appendChild(wrap);
-  });
-}
-
-// Highlight the chip of the selected part
-export function markChip(key) {
-  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.k === key));
-}
-
 // ---- info card ----
 let liveFns = [];   // values that change with the rpm
 export function renderInfo(key) {
   const box = $('info');
   liveFns = [];
   if (!key) {
-    box.innerHTML = '<div class="hint"><b>Click any component</b> on the engine, or choose one from the list below, to see what it does. Raise the revs to watch the exhaust heat up.</div>';
+    box.innerHTML = '<div class="hint"><b>Hover any component</b> to see its name, then click the label (or the part) to read about it here. Raise the revs to watch the exhaust heat up.</div>';
     return;
   }
   const d = INFO[key];
@@ -132,6 +105,5 @@ export function initPanel(handlers) {
     setExplodeUI(exp.value / 100);
   });
 
-  buildPartsList();
   renderInfo(null);
 }
