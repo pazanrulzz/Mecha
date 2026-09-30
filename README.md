@@ -1,10 +1,10 @@
 # V12 Engine Viewer
 
-An interactive 3D V12 engine in the browser (Three.js / WebGL).
+An interactive 3D V12 engine in the browser using Three js and WebGL
 
 ## Run it
 
-Double-click `index.html`. No server is needed.
+Double click `index.html`. No server is needed.
 
 ## Folder map
 
@@ -12,7 +12,7 @@ Double-click `index.html`. No server is needed.
 index.html            page markup (canvas, side panel, sliders)
 css/style.css         all styles
 data/engine-data.js   the CAD engine mesh (packed data, do not edit)
-dist/app.js           built app (made from js/ - do not edit)
+dist/app.js           built app (made from js)
 js/
   main.js             starts the app + animation loop
   config.js           shared constants and live values (rpm, heat...)
@@ -42,8 +42,8 @@ js/
 `index.html` loads `dist/app.js`, which is built from `js/`. After editing a file in `js/`:
 
 ```
-npm install     (first time only)
-npm run build   (or: npm run watch)
+npm install     (first time running)
+npm run build   (npm run watch)
 ```
 
 Then reload `index.html`.
