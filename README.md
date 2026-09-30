@@ -3,9 +3,11 @@
 An interactive 3D V12 engine in the browser (Three.js / WebGL).
 
 ## Run it
+
 Double-click `index.html`. No server is needed.
 
 ## Folder map
+
 ```
 index.html            page markup (canvas, side panel, sliders)
 css/style.css         all styles
@@ -36,10 +38,12 @@ js/
 ```
 
 ## Change the code
+
 `index.html` loads `dist/app.js`, which is built from `js/`. After editing a file in `js/`:
 
 ```
 npm install     (first time only)
 npm run build   (or: npm run watch)
 ```
+
 Then reload `index.html`.
