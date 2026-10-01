@@ -3,6 +3,7 @@
 Interactive 3D engines in the browser (Three.js / WebGL). Use the bar at the top to switch between the Ferrari V12 and the Mercedes-Benz DB 605.
 
 ## Run it
+
 Double-click `index.html`. No server is needed.
 
 ## Folder map
@@ -45,8 +46,8 @@ js/
 `index.html` loads `dist/app.js`, which is built from `js/`. After editing a file in `js/`:
 
 ```
-npm install     (first time only)
-npm run build   (or: npm run watch)
+npm install     (first time running)
+npm run build   (npm run watch)
 ```
 Then reload `index.html`.
 
