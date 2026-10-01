@@ -26,6 +26,20 @@
       </svg>
     </button>
 
+    <!-- Navigation bar: switch between the engines -->
+    <nav id="nav" aria-label="Engines">
+      <div id="navbox">
+        <button data-engine="ferrari" class="on">Ferrari V12</button
+        ><button data-engine="db605">Mercedes DB 605</button>
+      </div>
+    </nav>
+    <!-- Model credit (shown for the DB 605) -->
+    <div id="credit" hidden></div>
+
+    <!-- View selector (top of the 3D view) -->
+    <div id="viewbar"><div id="viewbox"><button data-view="solid" class="on">Solid</button><button data-view="cut">Cutaway</button></div></div>
+
+
     <!-- Hover label: a line from the part to a small popover with its name -->
     <svg id="tipsvg" aria-hidden="true">
       <polyline id="tipline" points="" />
@@ -52,17 +66,12 @@
     <!-- Side panel on the right -->
     <aside id="panel">
       <header>
-        <span class="brand">V12 <i>●</i> ENGINE</span
-        ><span class="sub">Interactive 3D model</span>
+        <span class="brand" id="brand">V12 <i>●</i> ENGINE</span
+        ><span class="sub" id="brandsub">Interactive 3D model</span>
       </header>
       <!-- Rev slider, view buttons and live numbers -->
       <section>
-        <div class="lab">View</div>
-        <div class="btns">
-          <button data-view="solid" class="on">Solid</button
-          ><button data-view="cut">Cutaway</button>
-        </div>
-        <div class="lab" style="margin-top: 18px">Engine speed</div>
+        <div class="lab">Engine speed</div>
         <div class="rpm"><span id="rpmv">800</span><small>rpm</small></div>
         <input
           id="rev"

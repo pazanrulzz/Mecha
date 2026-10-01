@@ -1,8 +1,8 @@
 // panel.js - the right side panel: rev slider, exploded slider, parts list and info card
 import * as THREE from 'three';
 import { controls } from '../scene.js';
-import { IDLE, MAXR, S, state, fmt, gasTemp } from '../config.js';
-import { setExplode } from '../model/explode.js';
+import { R, S, state, fmt, gasTemp } from '../config.js';
+import { cur } from '../engines.js';
 import { INFO } from './info.js';
 
 const $ = id => document.getElementById(id);   // short way to find an element
@@ -30,15 +30,15 @@ export function panelWidth() {
 
 // ---- rev slider ----
 export function setRev(v) {
-  S.target = THREE.MathUtils.clamp(v, IDLE, MAXR);
+  S.target = THREE.MathUtils.clamp(v, R.idle, R.max);
   rev.value = S.target;
-  rev.style.setProperty('--p', ((S.target - IDLE) / (MAXR - IDLE) * 100) + '%');   // red fill
+  rev.style.setProperty('--p', ((S.target - R.idle) / (R.max - R.idle) * 100) + '%');   // red fill
 }
 
 // ---- exploded slider (v = 0..1) ----
 export function setExplodeUI(v) {
   exp.value = v * 100;
-  setExplode(v);
+  cur.e.setExplode(v);
   exp.style.setProperty('--p', (v * 100) + '%');
   $('expv').textContent = Math.round(v * 100) + '%';
 }
@@ -65,7 +65,7 @@ export function renderInfo(key) {
   });
   box.innerHTML = `<div class="card"><div class="tag">${d.tag}</div><h2>${d.name}</h2><p>${d.desc}</p><div class="specs">${rows}</div>
     <div class="actions"><button id="zoomBtn">Zoom to part</button><button id="clrBtn">Clear</button></div>
-    <div class="note">Figures are approximate reference values for a modern 6.5 L V12; the model is stylised.</div></div>`;
+    <div class="note">${cur.e.note}</div></div>`;
   $('zoomBtn').addEventListener('click', () => onZoom(key));
   $('clrBtn').addEventListener('click', () => onSelect(null));
 }
@@ -82,10 +82,21 @@ function updateLive() {
 export function updateReadouts(rpmShown) {
   $('rpmv').textContent = fmt(Math.round(rpmShown / 10) * 10);
   $('s-temp').textContent = fmt(gasTemp());
-  $('s-spark').textContent = fmt(rpmShown / 120 * 12);
-  $('s-piston').textContent = fmt(2 * 0.0752 * rpmShown / 60, 1);
+  $('s-spark').textContent = fmt(rpmShown / 120 * cur.e.sparkK);
+  $('s-piston').textContent = fmt(2 * cur.e.stroke * rpmShown / 60, 1);
   $('heatbar').style.width = (S.heat * 100) + '%';
   updateLive();
+}
+
+// Change the panel for another engine: title, rev range and preset buttons
+export function setEngineUI(e) {
+  $('brand').innerHTML = e.brand;
+  $('brandsub').textContent = e.sub;
+  rev.min = e.idle; rev.max = e.max;
+  document.querySelectorAll('[data-r]').forEach((b, i) => { b.dataset.r = e.presets[i]; });
+  S.rpm = S.target = e.idle;
+  setRev(e.idle);
+  renderInfo(null);
 }
 
 // Connect all buttons and sliders. Call once at start.
@@ -98,7 +109,7 @@ export function initPanel(handlers) {
 
   rev.addEventListener('input', () => setRev(+rev.value));
   document.querySelectorAll('[data-r]').forEach(b => b.addEventListener('click', () => setRev(+b.dataset.r)));
-  setRev(IDLE);
+  setRev(R.idle);
 
   exp.addEventListener('input', () => {
     controls.autoRotate = false;

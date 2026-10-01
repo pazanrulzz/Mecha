@@ -105,11 +105,11 @@ export function buildProcedural() {
   });
   state.part = null;
 
-  buildFloor();
+  EX.floor = makeFloor(FLOOR_Y);   // moved down in the exploded view
 }
 
 // Dark glossy floor that fades to pure black at the edges
-function buildFloor() {
+export function makeFloor(y) {
   // radial fade texture used as an alpha map (white centre, black edge)
   const c = document.createElement('canvas');
   c.width = c.height = 512;
@@ -127,8 +127,8 @@ function buildFloor() {
     new THREE.MeshStandardMaterial({ color: 0x0b0b0d, metalness: 0.55, roughness: 0.3, transparent: true, alphaMap: new THREE.CanvasTexture(c), envMapIntensity: 0.4 })
   );
   floor.rotation.x = -Math.PI / 2;
-  floor.position.y = FLOOR_Y;
+  floor.position.y = y;
   floor.receiveShadow = true;
   scene.add(floor);
-  EX.floor = floor;   // moved down in the exploded view
+  return floor;
 }

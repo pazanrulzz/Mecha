@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { canvas, camera, controls } from '../scene.js';
 import { state } from '../config.js';
-import { root } from '../model/rig.js';
+import { cur } from '../engines.js';
 import { partMeshes } from '../geometry.js';
 import { cutPlane, setCutaway } from '../model/cutaway.js';
 import { renderInfo, openPanel } from './panel.js';
@@ -51,7 +51,7 @@ export function select(key, fly = false) {
 
 // Smoothly move the camera so the part fills the view
 export function flyTo(key) {
-  root.updateMatrixWorld(true);
+  cur.e.root.updateMatrixWorld(true);
   const box = new THREE.Box3();
   (partMeshes[key] || []).forEach(m => box.expandByObject(m));
   if (box.isEmpty()) return;
@@ -73,7 +73,7 @@ function pick(ev) {
   const r = canvas.getBoundingClientRect();
   mouse.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
   ray.setFromCamera(mouse, camera);
-  const hits = ray.intersectObject(root, true);
+  const hits = ray.intersectObject(cur.e.root, true);
   for (const h of hits) {
     if (state.cutOn && cutPlane.distanceToPoint(h.point) < 0) continue;   // ignore the cut-away half
     const o = h.object;
@@ -126,8 +126,8 @@ export function initInteraction() {
     state.fly = {
       t: 0,
       fromT: controls.target.clone(), fromP: camera.position.clone(),
-      toT: on ? new THREE.Vector3(-12, 12, 0) : new THREE.Vector3(0, 14, 0),
-      toP: on ? new THREE.Vector3(-100, 2, 80) : new THREE.Vector3(80, 50, 110),
+      toT: (on ? cur.e.cam.cutTarget : cur.e.cam.target).clone(),
+      toP: (on ? cur.e.cam.cutPos : cur.e.cam.pos).clone(),
     };
   }));
 }
