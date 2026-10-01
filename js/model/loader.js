@@ -6,6 +6,7 @@ import { installCut, cutMats } from './cutaway.js';
 import { eng, A, CX, CY } from './rig.js';
 import { buildProcedural } from './procedural.js';
 import { buildExplode } from './explode.js';
+import { setUI } from '../ui/store.js';
 
 // Read the packed data: gzip + base64 -> binary buffer
 async function readData() {
@@ -89,8 +90,7 @@ export async function loadEngine() {
   buildExplode(meshes);   // remember where each part goes when exploded
   A.ready = true;
 
-  const ld = document.getElementById('loading');
-  if (ld) ld.remove();
+  setUI({ loading: null });
   window.__anim = A;      // handy for debugging
 }
 
