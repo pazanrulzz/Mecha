@@ -1,120 +1,69 @@
-// panel.js - the right side panel: rev slider, exploded slider, parts list and info card
+// panel.js - connects the 3D code to the side panel (the panel itself is React, see SidePanel.jsx)
 import * as THREE from 'three';
-import { controls } from '../scene.js';
 import { R, S, state, fmt, gasTemp } from '../config.js';
 import { cur } from '../engines.js';
-import { INFO } from './info.js';
-
-const $ = id => document.getElementById(id);   // short way to find an element
-const panel = $('panel'), tog = $('tog'), rev = $('rev'), exp = $('exp');
+import { setUI } from './store.js';
 
 // Functions given by interaction.js (select a part / zoom to it)
-let onSelect = () => {}, onZoom = () => {};
+export const handlers = { onSelect: () => {}, onZoom: () => {} };
 
 // ---- open / close the panel ----
-export function applyPanel() {
-  panel.classList.toggle('closed', !state.panelOpen);
-  tog.classList.toggle('closed', !state.panelOpen);
-  tog.setAttribute('aria-expanded', String(state.panelOpen));
-  document.body.classList.toggle('pc', !state.panelOpen);   // moves the exploded slider
-}
 export function openPanel() {
   state.panelOpen = true;
-  applyPanel();
+  setUI({ panelOpen: true });
 }
-export const togglePanel = () => tog.click();
+export function togglePanel() {
+  state.panelOpen = !state.panelOpen;
+  setUI({ panelOpen: state.panelOpen });
+}
 // Width of the panel in pixels (0 when closed or on small screens)
 export function panelWidth() {
-  return (state.panelOpen && state.W > 720) ? Math.min(panel.offsetWidth, state.W * 0.5) : 0;
+  const el = document.getElementById('panel');
+  return (state.panelOpen && state.W > 720 && el) ? Math.min(el.offsetWidth, state.W * 0.5) : 0;
 }
 
 // ---- rev slider ----
 export function setRev(v) {
   S.target = THREE.MathUtils.clamp(v, R.idle, R.max);
-  rev.value = S.target;
-  rev.style.setProperty('--p', ((S.target - R.idle) / (R.max - R.idle) * 100) + '%');   // red fill
+  setUI({ rev: S.target });
 }
 
 // ---- exploded slider (v = 0..1) ----
 export function setExplodeUI(v) {
-  exp.value = v * 100;
   cur.e.setExplode(v);
-  exp.style.setProperty('--p', (v * 100) + '%');
-  $('expv').textContent = Math.round(v * 100) + '%';
+  setUI({ explode: v });
 }
 
-// ---- info card ----
-let liveFns = [];   // values that change with the rpm
+// ---- info card: React shows the part chosen here ----
 export function renderInfo(key) {
-  const box = $('info');
-  liveFns = [];
-  if (!key) {
-    box.innerHTML = '<div class="hint"><b>Hover any component</b> to see its name, then click the label (or the part) to read about it here. Raise the revs to watch the exhaust heat up.</div>';
-    return;
-  }
-  const d = INFO[key];
-  // one row per spec; function values are live
-  let rows = '';
-  d.specs.forEach(([label, v], i) => {
-    if (typeof v === 'function') {
-      liveFns.push([`lv${i}`, v]);
-      rows += `<div class="row"><span>${label}</span><b id="lv${i}" class="live">${v()}</b></div>`;
-    } else {
-      rows += `<div class="row"><span>${label}</span><b>${v}</b></div>`;
-    }
-  });
-  box.innerHTML = `<div class="card"><div class="tag">${d.tag}</div><h2>${d.name}</h2><p>${d.desc}</p><div class="specs">${rows}</div>
-    <div class="actions"><button id="zoomBtn">Zoom to part</button><button id="clrBtn">Clear</button></div>
-    <div class="note">${cur.e.note}</div></div>`;
-  $('zoomBtn').addEventListener('click', () => onZoom(key));
-  $('clrBtn').addEventListener('click', () => onSelect(null));
-}
-
-// Refresh the live numbers in the info card
-function updateLive() {
-  liveFns.forEach(([id, fn]) => {
-    const el = $(id);
-    if (el) el.textContent = fn();
-  });
+  setUI({ selected: key });
 }
 
 // Update the numbers next to the rev slider (called a few times per second)
 export function updateReadouts(rpmShown) {
-  $('rpmv').textContent = fmt(Math.round(rpmShown / 10) * 10);
-  $('s-temp').textContent = fmt(gasTemp());
-  $('s-spark').textContent = fmt(rpmShown / 120 * cur.e.sparkK);
-  $('s-piston').textContent = fmt(2 * cur.e.stroke * rpmShown / 60, 1);
-  $('heatbar').style.width = (S.heat * 100) + '%';
-  updateLive();
+  setUI({ read: {
+    rpm: Math.round(rpmShown / 10) * 10,
+    temp: gasTemp(),
+    spark: rpmShown / 120 * cur.e.sparkK,
+    piston: 2 * cur.e.stroke * rpmShown / 60,
+    heat: S.heat,
+  } });
 }
 
-// Change the panel for another engine: title, rev range and preset buttons
+// Show the settings of an engine in the panel: title, rev range and presets
 export function setEngineUI(e) {
-  $('brand').innerHTML = e.brand;
-  $('brandsub').textContent = e.sub;
-  rev.min = e.idle; rev.max = e.max;
-  document.querySelectorAll('[data-r]').forEach((b, i) => { b.dataset.r = e.presets[i]; });
   S.rpm = S.target = e.idle;
-  setRev(e.idle);
-  renderInfo(null);
-}
-
-// Connect all buttons and sliders. Call once at start.
-export function initPanel(handlers) {
-  onSelect = handlers.onSelect;
-  onZoom = handlers.onZoom;
-
-  tog.addEventListener('click', () => { state.panelOpen = !state.panelOpen; applyPanel(); });
-  applyPanel();
-
-  rev.addEventListener('input', () => setRev(+rev.value));
-  document.querySelectorAll('[data-r]').forEach(b => b.addEventListener('click', () => setRev(+b.dataset.r)));
-  setRev(R.idle);
-
-  exp.addEventListener('input', () => {
-    controls.autoRotate = false;
-    setExplodeUI(exp.value / 100);
+  setUI({
+    engine: { id: e.id, label: e.label, brand: e.brand, sub: e.sub, note: e.note, idle: e.idle, max: e.max, presets: e.presets, credit: !!e.credit },
+    rev: e.idle,
+    selected: null,
   });
-
-  renderInfo(null);
 }
+
+// Start. Call once.
+export function initPanel(h) {
+  handlers.onSelect = h.onSelect;
+  handlers.onZoom = h.onZoom;
+  setEngineUI(cur.e);
+}
+export { fmt };

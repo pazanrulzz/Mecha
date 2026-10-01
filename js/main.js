@@ -13,6 +13,8 @@ import { initPanel, setRev, setExplodeUI, togglePanel, panelWidth, updateReadout
 import { initInteraction, select, flyTo, hiMat } from './ui/interaction.js';
 import { initNav } from './ui/nav.js';
 import { updateTip } from './ui/tooltip.js';
+import { mountUI } from './ui/mount.jsx';
+import { setUI } from './ui/store.js';
 
 // ---- window size ----
 function resize() {
@@ -98,13 +100,13 @@ function frame() {
 }
 
 // ---- start ----
+mountUI();   // the React interface must exist before the 3D code looks for its parts
 initPanel({ onSelect: select, onZoom: flyTo });
 initInteraction();
 initNav();
 loadEngine().catch(err => {
   console.error(err);
-  const ld = document.getElementById('loading');
-  if (ld) ld.textContent = 'Could not load the engine data: ' + err.message;
+  setUI({ loading: { text: 'Could not load the engine data: ' + err.message, status: 'error' } });
 });
 frame();
 

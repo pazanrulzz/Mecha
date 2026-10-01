@@ -13,7 +13,7 @@ export const engines = {
   // ---- Ferrari V12 (loaded at start) ----
   ferrari: {
     id: 'ferrari', label: 'Ferrari V12',
-    brand: 'V12 <i>●</i> ENGINE', sub: 'Interactive 3D model',
+    brand: 'V12 Engine', sub: 'Interactive 3D model',
     title: 'Ferrari V12 Engine',
     root: fRoot,
     idle: 800, max: 8900, presets: [800, 4500, 8900],
@@ -31,7 +31,7 @@ export const engines = {
   // ---- Mercedes-Benz DB 605 (loaded the first time it is chosen) ----
   db605: {
     id: 'db605', label: 'Mercedes DB 605',
-    brand: 'DB 605 <i>●</i> ENGINE', sub: 'Mercedes-Benz · 1942 · Bf 109',
+    brand: 'DB 605 Engine', sub: 'Mercedes-Benz · 1942 · Bf 109',
     title: 'Mercedes-Benz DB 605 Engine',
     root: dRoot,
     idle: 600, max: 2800, presets: [600, 2300, 2800],

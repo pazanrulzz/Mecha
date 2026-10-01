@@ -5,9 +5,7 @@ import { state } from '../config.js';
 import { INFO } from './info.js';
 import { panelWidth } from './panel.js';
 
-const box = document.getElementById('tipbox');     // the popover button
-const line = document.getElementById('tipline');   // line from the part to the popover
-const dot = document.getElementById('tipdot');     // small dot on the part
+let box, line, dot;   // the popover button, the line to it and the dot on the part (found in initTooltip)
 
 let current = null;      // { key, point } of the label being shown
 let hideTimer = 0;       // timer that hides the label after the mouse leaves
@@ -73,6 +71,9 @@ export function inTipZone(x, y) {
 
 // Connect the popover. handler(key) runs when it is clicked.
 export function initTooltip(handler) {
+  box = document.getElementById('tipbox');
+  line = document.getElementById('tipline');
+  dot = document.getElementById('tipdot');
   onClick = handler;
   box.addEventListener('click', () => {
     if (!current) return;

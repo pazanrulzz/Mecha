@@ -7,6 +7,7 @@ import { partMeshes } from '../geometry.js';
 import { cutPlane, setCutaway } from '../model/cutaway.js';
 import { renderInfo, openPanel } from './panel.js';
 import { showTip, hideTip, initTooltip, inTipZone } from './tooltip.js';
+import { setUI } from './store.js';
 
 // ---- blue glow drawn over the selected part ----
 export const hiMat = new THREE.MeshBasicMaterial({
@@ -115,19 +116,18 @@ export function initInteraction() {
       select(k === state.selected ? null : k);   // click again to deselect
     }
   });
+}
 
-  // Solid / Cutaway buttons
-  document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => {
-    const on = b.dataset.view === 'cut';
-    document.querySelectorAll('[data-view]').forEach(x => x.classList.toggle('on', x === b));
-    setCutaway(on);
-    controls.autoRotate = false;
-    // move the camera to a good spot for each view
-    state.fly = {
-      t: 0,
-      fromT: controls.target.clone(), fromP: camera.position.clone(),
-      toT: (on ? cur.e.cam.cutTarget : cur.e.cam.target).clone(),
-      toP: (on ? cur.e.cam.cutPos : cur.e.cam.pos).clone(),
-    };
-  }));
+// Switch between Solid and Cutaway ('solid' or 'cut') and move the camera to a good spot
+export function setView(name) {
+  const on = name === 'cut';
+  setUI({ view: on ? 'cut' : 'solid' });
+  setCutaway(on);
+  controls.autoRotate = false;
+  state.fly = {
+    t: 0,
+    fromT: controls.target.clone(), fromP: camera.position.clone(),
+    toT: (on ? cur.e.cam.cutTarget : cur.e.cam.target).clone(),
+    toP: (on ? cur.e.cam.cutPos : cur.e.cam.pos).clone(),
+  };
 }
