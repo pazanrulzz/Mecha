@@ -1,6 +1,6 @@
 // App.jsx - the whole interface, built with React and shadcn/ui (dark mode)
-import React from 'react';
-import { PanelRightClose, PanelRightOpen, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { PanelRightClose, PanelRightOpen, Loader2, ChevronDown } from 'lucide-react';
 import { useUI } from './store.js';
 import { togglePanel, setExplodeUI } from './panel.js';
 import { setView } from './interaction.js';
@@ -11,7 +11,45 @@ import { Button, buttonVariants } from '../components/ui/button.jsx';
 import { Slider } from '../components/ui/slider.jsx';
 import { cn } from '../lib/utils.js';
 
-const ENGINES = [['ferrari', 'Ferrari V12'], ['db605', 'Mercedes DB 605']];
+// Menus in the header: each one lists the engines nested inside it
+const MENUS = [
+  { label: 'Auto', engines: [['ferrari', 'Ferrari V12']] },
+  { label: 'Aircraft', engines: [['db605', 'Mercedes DB 605']] },
+];
+
+// One header menu: opens on click or hover, closes on Escape, outside click or choosing an engine
+function NavMenu({ menu, current }) {
+  const [open, setOpen] = useState(false);
+  const box = useRef(null);
+  const active = menu.engines.some(([k]) => k === current);
+  useEffect(() => {
+    if (!open) return;
+    const off = e => { if (!box.current?.contains(e.target)) setOpen(false); };
+    const esc = e => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('pointerdown', off);
+    document.addEventListener('keydown', esc);
+    return () => { document.removeEventListener('pointerdown', off); document.removeEventListener('keydown', esc); };
+  }, [open]);
+  return (
+    <div ref={box} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <Button variant="ghost" size="sm" aria-haspopup="menu" aria-expanded={open} className={cn('h-8 gap-1', active && 'bg-accent text-accent-foreground')} onClick={() => setOpen(o => !o)}>
+        {menu.label}<ChevronDown className={cn('size-4 transition-transform', open && 'rotate-180')} />
+      </Button>
+      {open && (
+        <div role="menu" className="absolute left-0 top-full z-40 min-w-[11rem] pt-1">
+          <div className="rounded-md border bg-background p-1 text-foreground shadow-md">
+            {menu.engines.map(([k, label]) => (
+              <button key={k} role="menuitem" className={cn('flex w-full items-center rounded-sm px-2 py-1.5 text-left text-sm hover:bg-accent hover:text-accent-foreground', k === current && 'bg-accent/60 font-medium')}
+                onClick={() => { setOpen(false); switchTo(k); }}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 // Top bar: title, engine switch and the panel button
 function TopBar() {
@@ -19,12 +57,10 @@ function TopBar() {
   const open = useUI(s => s.panelOpen);
   return (
     <header className="fixed inset-x-0 top-0 z-30 flex h-12 items-center gap-4 border-b bg-background/90 px-4 backdrop-blur">
-      <span className="text-sm font-semibold tracking-tight"><span className="text-muted-foreground">3D</span> Engine Viewer</span>
-      <Tabs value={id} onValueChange={switchTo}>
-        <TabsList className="h-8">
-          {ENGINES.map(([k, label]) => <TabsTrigger key={k} value={k} className="h-6">{label}</TabsTrigger>)}
-        </TabsList>
-      </Tabs>
+      <span className="text-sm font-semibold tracking-tight">Mecha</span>
+      <nav aria-label="Engines" className="flex items-center gap-1">
+        {MENUS.map(m => <NavMenu key={m.label} menu={m} current={id} />)}
+      </nav>
       <Button variant="ghost" size="icon" className="ml-auto" aria-label={open ? 'Hide details panel' : 'Show details panel'} title={open ? 'Hide details panel' : 'Show details panel'} onClick={togglePanel}>
         {open ? <PanelRightClose /> : <PanelRightOpen />}
       </Button>

@@ -93,8 +93,13 @@ export default function SidePanel() {
       className={'fixed bottom-0 right-0 top-12 z-20 overflow-y-auto border-l bg-background/95 backdrop-blur transition-transform duration-300 ' + (open ? '' : 'translate-x-full')}
       style={{ width: PANEL_W }}>
       <header className="px-4 pb-3 pt-4">
-        <h1 className="text-sm font-semibold uppercase tracking-[0.16em]">{engine.brand}</h1>
-        <p className="mt-0.5 text-xs text-muted-foreground">{engine.sub}</p>
+        <div className="flex items-center gap-3">
+          {engine.logo && <span aria-hidden="true" className="size-9 shrink-0 text-foreground [&>svg]:size-full [&>svg]:fill-current" dangerouslySetInnerHTML={{ __html: engine.logo }} />}
+          <div className="min-w-0">
+            <h1 className="text-sm font-semibold uppercase tracking-[0.16em]">{engine.brand}</h1>
+            <p className="mt-0.5 text-xs text-muted-foreground">{engine.sub}</p>
+          </div>
+        </div>
       </header>
       <Separator />
       <Revs />

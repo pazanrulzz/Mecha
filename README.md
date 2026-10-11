@@ -1,6 +1,6 @@
-# Engine Viewer
+# Mecha
 
-Interactive 3D engines in the browser (Three.js / WebGL). The interface is React with shadcn/ui components (Tailwind CSS) in dark mode. Use the bar at the top to switch between the Ferrari V12 and the Mercedes-Benz DB 605.
+Interactive 3D engines in the browser (Three.js / WebGL). The interface is React with shadcn/ui components (Tailwind CSS) in dark mode. Use the menus at the top to pick an engine: Auto > Ferrari V12, Aircraft > Mercedes-Benz DB 605.
 
 ## Run it
 Double-click `index.html`. No server is needed.

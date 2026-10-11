@@ -54,7 +54,7 @@ export function updateReadouts(rpmShown) {
 export function setEngineUI(e) {
   S.rpm = S.target = e.idle;
   setUI({
-    engine: { id: e.id, label: e.label, brand: e.brand, sub: e.sub, note: e.note, idle: e.idle, max: e.max, presets: e.presets, credit: !!e.credit },
+    engine: { id: e.id, label: e.label, logo: e.logo, brand: e.brand, sub: e.sub, note: e.note, idle: e.idle, max: e.max, presets: e.presets, credit: !!e.credit },
     rev: e.idle,
     selected: null,
   });

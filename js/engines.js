@@ -6,6 +6,8 @@ import { setExplode as setExplodeFerrari } from './model/explode.js';
 import { loadDB605, root as dRoot, D, lin as dLin, setExplodeDB, spinShaft, updateDB, DB_CAM } from './model/db605.js';
 import { DB605_NOTE } from './ui/info-db605.js';
 import { S } from './config.js';
+import ferrariLogo from '../assets/logos/ferrari.svg';
+import mercedesLogo from '../assets/logos/mercedes.svg';
 
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -13,6 +15,7 @@ export const engines = {
   // ---- Ferrari V12 (loaded at start) ----
   ferrari: {
     id: 'ferrari', label: 'Ferrari V12',
+    logo: ferrariLogo,
     brand: 'V12 Engine', sub: 'Interactive 3D model',
     title: 'Ferrari V12 Engine',
     root: fRoot,
@@ -31,6 +34,7 @@ export const engines = {
   // ---- Mercedes-Benz DB 605 (loaded the first time it is chosen) ----
   db605: {
     id: 'db605', label: 'Mercedes DB 605',
+    logo: mercedesLogo,
     brand: 'DB 605 Engine', sub: 'Mercedes-Benz · 1942 · Bf 109',
     title: 'Mercedes-Benz DB 605 Engine',
     root: dRoot,

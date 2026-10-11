@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "css": "tailwindcss -c tailwind.config.js -i css/style.css -o dist/app.css --minify",
-    "build": "npm run css && esbuild js/main.js --minify --bundle --format=iife --jsx=automatic --loader:.js=jsx --define:process.env.NODE_ENV=\\\"production\\\" --outfile=dist/app.js",
-    "watch": "esbuild js/main.js --sourcemap --bundle --format=iife --jsx=automatic --loader:.js=jsx --define:process.env.NODE_ENV=\\\"production\\\" --outfile=dist/app.js --watch"
+    "build": "npm run css && esbuild js/main.js --minify --bundle --format=iife --jsx=automatic --loader:.js=jsx --loader:.svg=text --define:process.env.NODE_ENV=\\\"production\\\" --outfile=dist/app.js",
+    "watch": "esbuild js/main.js --sourcemap --bundle --format=iife --jsx=automatic --loader:.js=jsx --loader:.svg=text --define:process.env.NODE_ENV=\\\"production\\\" --outfile=dist/app.js --watch"
   },
   "dependencies": {
     "@radix-ui/react-progress": "^1.1.16",
