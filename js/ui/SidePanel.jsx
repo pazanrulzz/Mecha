@@ -3,7 +3,12 @@ import React from 'react';
 import { useUI } from './store.js';
 import { setRev, handlers } from './panel.js';
 import { INFO } from './info.js';
-import './info-db605.js';   // adds the DB 605 texts to INFO
+import './info-db605.js';
+import './info-sbc.js';
+import './info-sbcs.js';
+import './info-radial.js';
+import './info-fokker.js';
+import './info-turbofan.js';   // adds the DB 605 texts to INFO
 import { fmt } from '../config.js';
 import { Slider } from '../components/ui/slider.jsx';
 import { Button } from '../components/ui/button.jsx';
@@ -37,7 +42,7 @@ function Revs() {
         ))}
       </div>
       <div className="mt-4 grid grid-cols-3 gap-2">
-        {[[fmt(read.temp), 'Exhaust °C'], [fmt(read.spark), 'Sparks / s'], [fmt(read.piston, 1), 'Piston m/s']].map(([v, l]) => (
+        {[[fmt(read.temp), 'Exhaust °C'], [fmt(read.spark), (engine.labels || [])[0] || 'Sparks / s'], [fmt(read.piston, engine.labels ? 0 : 1), (engine.labels || [])[1] || 'Piston m/s']].map(([v, l]) => (
           <Card key={l}><CardContent>
             <b className="block text-xl font-medium tabular-nums">{v}</b>
             <span className="text-[10px] uppercase tracking-wide text-muted-foreground">{l}</span>

@@ -13,8 +13,8 @@ import { cn } from '../lib/utils.js';
 
 // Menus in the header: each one lists the engines nested inside it
 const MENUS = [
-  { label: 'Auto', engines: [['ferrari', 'Ferrari V12']] },
-  { label: 'Aircraft', engines: [['db605', 'Mercedes DB 605']] },
+  { label: 'Auto', engines: [['ferrari', 'Ferrari V12'], ['sbc', 'Chevrolet SBC V8'], ['sbcs', 'Supercharged SBC V8']] },
+  { label: 'Aircraft', engines: [['db605', 'Mercedes DB 605'], ['radial', 'Nine-cylinder radial'], ['fokker', 'Oberursel UR.II rotary'], ['turbofan', 'Turbofan jet engine']] },
 ];
 
 // One header menu: opens on click or hover, closes on Escape, outside click or choosing an engine

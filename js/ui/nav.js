@@ -1,6 +1,7 @@
 // nav.js - switching between the engines (the buttons are in the React header, see App.jsx)
 import { camera, controls } from '../scene.js';
 import { state, S, R } from '../config.js';
+import { EX } from '../model/rig.js';
 import { engines, cur, EMIT } from '../engines.js';
 import { setCutaway, setCutNormal, CUT_N } from '../model/cutaway.js';
 import { setEngineUI, setExplodeUI } from './panel.js';
@@ -48,6 +49,7 @@ export async function switchTo(id) {
   EMIT.colls = next.emit.colls;
 
   // use the new engine's settings
+  EX.lin.copy(next.lin);   // exploded offsets are in the engine's own units
   setCutNormal(next.cam.cutNormal || CUT_N);
   R.idle = next.idle;
   R.max = next.max;

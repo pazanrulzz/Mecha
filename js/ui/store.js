@@ -4,7 +4,7 @@ import { useSyncExternalStore } from 'react';
 // Everything the interface shows
 export const ui = {
   panelOpen: window.innerWidth > 720,   // side panel open or closed
-  engine: { id: 'ferrari', label: 'Ferrari V12', logo: '', brand: 'V12 Engine', sub: '', note: '', idle: 800, max: 8900, presets: [800, 4500, 8900], credit: false },
+  engine: { id: 'ferrari', label: 'Ferrari V12', logo: '', brand: 'V12 Engine', sub: '', note: '', idle: 800, max: 8900, presets: [800, 4500, 8900], credit: false, labels: null },
   view: 'solid',                        // 'solid' or 'cut'
   rev: 800,                             // speed the slider asks for
   explode: 0,                           // 0..1

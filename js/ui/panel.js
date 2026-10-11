@@ -44,8 +44,8 @@ export function updateReadouts(rpmShown) {
   setUI({ read: {
     rpm: Math.round(rpmShown / 10) * 10,
     temp: gasTemp(),
-    spark: rpmShown / 120 * cur.e.sparkK,
-    piston: 2 * cur.e.stroke * rpmShown / 60,
+    spark: cur.e.calc ? cur.e.calc.a(rpmShown) : rpmShown / 120 * cur.e.sparkK,
+    piston: cur.e.calc ? cur.e.calc.b(rpmShown) : 2 * cur.e.stroke * rpmShown / 60,
     heat: S.heat,
   } });
 }
@@ -54,7 +54,7 @@ export function updateReadouts(rpmShown) {
 export function setEngineUI(e) {
   S.rpm = S.target = e.idle;
   setUI({
-    engine: { id: e.id, label: e.label, logo: e.logo, brand: e.brand, sub: e.sub, note: e.note, idle: e.idle, max: e.max, presets: e.presets, credit: !!e.credit },
+    engine: { id: e.id, label: e.label, logo: e.logo, brand: e.brand, sub: e.sub, note: e.note, idle: e.idle, max: e.max, presets: e.presets, credit: !!e.credit, labels: e.labels || null },
     rev: e.idle,
     selected: null,
   });
