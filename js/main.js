@@ -1,16 +1,20 @@
 // main.js - starts the app and runs the animation loop
 import * as THREE from 'three';
 import { renderer, camera, controls } from './scene.js';
-import { IDLE, MAXR, VIS, S, state } from './config.js';
+import { R, S, state } from './config.js';
 import { HEAT, glowMat } from './materials.js';
-import { root, A, EX } from './model/rig.js';
+import { A, EX } from './model/rig.js';
+import { cur } from './engines.js';
 import { loadEngine } from './model/loader.js';
-import { updateKinematics } from './model/kinematics.js';
 import { setCutaway } from './model/cutaway.js';
 import { updateParticles, heatLights, pointMat } from './effects/particles.js';
 import { renderPost, resizePost } from './effects/postprocessing.js';
 import { initPanel, setRev, setExplodeUI, togglePanel, panelWidth, updateReadouts } from './ui/panel.js';
 import { initInteraction, select, flyTo, hiMat } from './ui/interaction.js';
+import { initNav } from './ui/nav.js';
+import { updateTip } from './ui/tooltip.js';
+import { mountUI } from './ui/mount.jsx';
+import { setUI } from './ui/store.js';
 
 // ---- window size ----
 function resize() {
@@ -45,11 +49,11 @@ function frame() {
   S.rpm += (S.target - S.rpm) * (1 - Math.exp(-dt * 2.6));
   const wobble = S.target < 1000 ? Math.sin(state.time * 9) * 14 + Math.sin(state.time * 23) * 7 : 0;
   const rpmShown = S.rpm + wobble;
-  const n = THREE.MathUtils.clamp((S.rpm - IDLE) / (MAXR - IDLE), 0, 1);   // 0 = idle, 1 = redline
+  const n = THREE.MathUtils.clamp((S.rpm - R.idle) / (R.max - R.idle), 0, 1);   // 0 = idle, 1 = redline
 
   // turn the crank and move pistons, rods, cams
-  S.crank += rpmShown * Math.PI * 2 / 60 * VIS * dt;
-  updateKinematics(S.crank);
+  S.crank += rpmShown * Math.PI * 2 / 60 * cur.e.vis * dt;
+  cur.e.frame();
 
   // exhaust heat: builds up and cools down slowly
   const heatTarget = smooth(0.28, 0.95, n);
@@ -61,6 +65,7 @@ function frame() {
 
   // engine shake grows with rpm
   const amp = 0.012 + 0.11 * Math.pow(n, 1.6);
+  const root = cur.e.root;
   root.position.set((Math.random() - 0.5) * amp * 2, (Math.random() - 0.5) * amp * 2, 0);
   root.rotation.z = (Math.random() - 0.5) * amp * 0.004;
 
@@ -89,17 +94,19 @@ function frame() {
   }
 
   controls.update();
+  updateTip();   // keep the hover label on its part
   renderPost();
   requestAnimationFrame(frame);
 }
 
 // ---- start ----
+mountUI();   // the React interface must exist before the 3D code looks for its parts
 initPanel({ onSelect: select, onZoom: flyTo });
 initInteraction();
+initNav();
 loadEngine().catch(err => {
   console.error(err);
-  const ld = document.getElementById('loading');
-  if (ld) ld.textContent = 'Could not load the engine data: ' + err.message;
+  setUI({ loading: { text: 'Could not load the engine data: ' + err.message, status: 'error' } });
 });
 frame();
 

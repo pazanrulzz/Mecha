@@ -1,98 +1,21 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>V12 Engine</title>
-    <!-- All page styles live in this file -->
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <!-- The 3D view is drawn on this canvas -->
-    <canvas id="c"></canvas>
-    <!-- Shown until the engine has loaded -->
-    <div id="loading">Loading engine…</div>
-    <!-- Button that opens / closes the side panel -->
-    <button id="tog" aria-label="Toggle side panel" aria-expanded="true">
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.4"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ferrari V12 Engine</title>
+  <!-- Styles: Tailwind + shadcn/ui (built into dist/app.css) -->
+  <link rel="stylesheet" href="dist/app.css">
+</head>
+<body>
+  <!-- The 3D view is drawn on this canvas -->
+  <canvas id="c"></canvas>
+  <!-- The React interface (header, panel, sliders) is drawn here -->
+  <div id="ui"></div>
 
-    <!-- Exploded view slider (bottom of the screen) -->
-    <div id="exbar">
-      <div id="exbox">
-        <label for="exp">Assembled</label
-        ><input
-          id="exp"
-          type="range"
-          min="0"
-          max="100"
-          step="0.5"
-          value="0"
-          aria-label="Exploded view"
-        /><label for="exp">Exploded</label><span id="expv">0%</span>
-      </div>
-    </div>
-
-    <!-- Side panel on the right -->
-    <aside id="panel">
-      <header>
-        <span class="brand">V12 <i>●</i> ENGINE</span
-        ><span class="sub">Interactive 3D model</span>
-      </header>
-      <!-- Rev slider, view buttons and live numbers -->
-      <section>
-        <div class="lab">Engine speed</div>
-        <div class="rpm"><span id="rpmv">800</span><small>rpm</small></div>
-        <input
-          id="rev"
-          type="range"
-          min="800"
-          max="8900"
-          step="10"
-          value="800"
-          aria-label="Engine speed"
-        />
-        <div class="ticks"><span>IDLE</span><span>REDLINE</span></div>
-        <div class="btns">
-          <button data-r="800">Idle</button><button data-r="4500">Cruise</button
-          ><button data-r="8900">Max</button>
-        </div>
-        <div class="lab" style="margin-top: 18px">View</div>
-        <div class="btns">
-          <button data-view="solid" class="on">Solid</button
-          ><button data-view="cut">Cutaway</button>
-        </div>
-        <div class="stats">
-          <div class="stat"><b id="s-temp">240</b><span>Exhaust °C</span></div>
-          <div class="stat"><b id="s-spark">0</b><span>Sparks / s</span></div>
-          <div class="stat"><b id="s-piston">0</b><span>Piston m/s</span></div>
-        </div>
-        <div class="heat"><div id="heatbar"></div></div>
-        <div class="heatlab">
-          <span>COLD</span><span>EXHAUST HEAT</span><span>GLOWING</span>
-        </div>
-      </section>
-      <!-- Info card of the selected part (filled by js/ui/panel.js) -->
-      <section id="info"></section>
-      <!-- List of parts to click on (filled by js/ui/panel.js) -->
-      <section>
-        <div class="lab">Components</div>
-        <div id="plist"></div>
-      </section>
-    </aside>
-
-    <!-- 1) engine mesh data (defines window.ENGINE_DATA) -->
-    <script src="data/engine-data.js"></script>
-    <!-- 2) the app itself (built from the files in js/) -->
-    <script src="dist/app.js"></script>
-  </body>
+  <!-- 1) Ferrari mesh data (defines window.ENGINE_DATA) -->
+  <script src="data/engine-data.js"></script>
+  <!-- 2) the app itself (built from the files in js/) -->
+  <script src="dist/app.js"></script>
+</body>
 </html>

@@ -50,7 +50,7 @@ function emit() {
   pPtr = (pPtr + 1) % NP;
 
   let p, pex = null;
-  if (Math.random() < 0.65) {
+  if (Math.random() < 0.65 || !EMIT.colls.length) {
     // most wisps start on the primary pipes
     const pipe = EMIT.pipes[(Math.random() * EMIT.pipes.length) | 0];
     p = pipe[(Math.random() * pipe.length) | 0];

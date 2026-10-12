@@ -128,12 +128,7 @@ export function setExplode(e) {
   applyExplodeStatic();
 
   // lower the floor so parts do not sink into it
-  if (EX.floor) EX.floor.position.y = FLOOR_Y - 42 * e;
-
-  // make the shadow area bigger
-  const sc = key.shadow.camera, ext = 62 + 60 * e;
-  Object.assign(sc, { left: -ext, right: ext, top: ext, bottom: -ext, far: 420 + 200 * e });
-  sc.updateProjectionMatrix();
+  explodeCommon(e, EX.floor, FLOOR_Y);
 
   // move the orange heat lights with the exhaust collectors
   heatLights.forEach((l, k) => {
@@ -141,6 +136,16 @@ export function setExplode(e) {
     const c = EMIT.colls.find(c => Math.sign(c[0].x) === Math.sign(heatLightBase[k].x));
     if (c && c.ex) l.position.add(EX.w(c.ex));
   });
+}
+
+// Parts every engine needs when exploded: floor, shadow size and camera distance
+export function explodeCommon(e, floor, floorY) {
+  if (floor) floor.position.y = floorY - 42 * e;
+
+  // make the shadow area bigger
+  const sc = key.shadow.camera, ext = 62 + 60 * e;
+  Object.assign(sc, { left: -ext, right: ext, top: ext, bottom: -ext, far: 420 + 200 * e });
+  sc.updateProjectionMatrix();
 
   // pull the camera back and down so everything stays in view
   const kd = 1 + 1.05 * e, f = kd / EX.dolly;

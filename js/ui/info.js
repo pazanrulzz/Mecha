@@ -75,12 +75,3 @@ export const INFO = {
     specs: [['Count', '100+']] },
 };
 
-// Groups used to build the parts list in the side panel
-export const GROUPS = [
-  ['Engine core', ['block', 'head-gasket', 'head', 'valve-cover', 'oil-pan', 'crank-caps']],
-  ['Rotating assembly', ['crankshaft', 'piston', 'conrod', 'timing-gears']],
-  ['Valvetrain & ignition', ['valve', 'valve-spring', 'camshaft', 'cam-caps', 'spark-plug']],
-  ['Air & fuel', ['plenum', 'runners', 'throttle']],
-  ['Exhaust', ['exhaust-primaries', 'exhaust-collector']],
-  ['Drive & hardware', ['pulleys', 'head-studs', 'fasteners']],
-];
